@@ -16,6 +16,8 @@ DocServ client version 1.1.0
 Copyright (c) 2014 Sasha Pavelovich
 MIT license
 
+Contributors: awesomo4001, onebitmissing
+
 Commands:           ------------>
 In the URL prompt,
 

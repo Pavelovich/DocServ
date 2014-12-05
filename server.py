@@ -18,7 +18,7 @@ print '''
  / /_/ / /_/ / /__ ___/ /  __/ /   | |/ /
 /_____/\____/\___//____/\___/_/    |___/
 
-DocServ server version 1.1.0
+DocServ server version 1.2.1
 
 Copyright (c) 2014 Sasha Pavelovich
 MIT license
@@ -34,17 +34,24 @@ while 1:
     if data:
         ip,port = client.getpeername()
         data = data.split('|')
+        if len(data) != 3:
+            client.send("Invalid request")
+            continue
         username = data[0]
         hostname = data[1]
         data = data[2]
         request = ""+ip+" "+username+" @ "+hostname+" - "+data
         print request
+        if data == "/":
+            data = "index.txt"
         if log.endswith('/'):
             log = log[:-1]
         with open(log+"/server.log",'a') as f:
             f.write(request+'\n')
-        if path not in os.path.abspath(data):
+        if path not in os.path.abspath(path+"/"+data+"/"):
+#            client.send(os.path.abspath(path+"/"+data+"/"))
             client.send("File path error")
+            continue
         if data == '/':
             if os.path.isfile(path+"/index.txt") == False:
                 client.send("File not found")
