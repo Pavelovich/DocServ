@@ -4,6 +4,8 @@ import os
 
 #Enter the path to the server root directory
 path = "srv/"
+#Enter the path to the log file
+log = "log/"
 #Enter the IP address to listen on
 listen = "127.0.0.1"
 
@@ -37,9 +39,12 @@ while 1:
         data = data[2]
         request = ""+ip+" "+username+" @ "+hostname+" - "+data
         print request
-        log = open("log/server.log",'a')
-        log.write(request+'\n')
-        log.close()
+        if log.endswith('/'):
+            log = log[:-1]
+        with open(log+"/server.log",'a') as f:
+            f.write(request+'\n')
+        if path not in os.path.abspath(data):
+            client.send("File path error")
         if data == '/':
             if os.path.isfile(path+"/index.txt") == False:
                 client.send("File not found")
