@@ -9,6 +9,10 @@ log = "log/"
 #Enter the IP address to listen on
 listen = "127.0.0.1"
 
+restrict_ip = True
+
+approved_ip = ["127.0.0.5"]
+
 print '''
 
 ------------------------------------------------------------------------------
@@ -33,6 +37,9 @@ while 1:
     data = client.recv(1024)
     if data:
         ip,port = client.getpeername()
+        if restrict_ip == True and ip not in approved_ip:
+            client.send("Invalid IP address")
+            continue
         data = data.split('|')
         if len(data) != 3:
             client.send("Invalid request")
